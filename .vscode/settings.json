@@ -1,0 +1,22 @@
+{
+  "editor.formatOnSave": true,
+  "emmet.includeLanguages": {
+    "rust": "html"
+  },
+  "rust-analyzer.checkOnSave": true,
+  "rust-analyzer.check.allTargets": false,
+  "rust-analyzer.cargo.extraArgs": [
+    "--target",
+    "xtensa-esp32-none-elf"
+  ],
+  "rust-analyzer.linkedProjects": [
+    "esp/Cargo.toml",
+    "frontend/Cargo.toml",
+    "module/Cargo.toml"
+  ],
+  "rust-analyzer.rustfmt.overrideCommand": [
+    "rustfmt",
+    "--edition",
+    "2024"
+  ]
+}
