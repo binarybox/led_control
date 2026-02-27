@@ -1,5 +1,5 @@
 {
-  "name": "esp_weather",
+  "name": "led_control",
   // Select between image and build propieties to pull or build the image.
   // "image": "docker.io/espressif/idf-rust:esp32c6_latest",
   "build": {
@@ -14,11 +14,7 @@
     "EG_SIMULATOR_DUMP": "screenshot.png"
   },
   // https://github.com/serialport/serialport-rs/issues/153
-  "runArgs": [
-    "--privileged",
-    "--env-file",
-    ".devcontainer/wifi.env"
-  ],
+  "runArgs": ["--privileged", "--env-file", ".devcontainer/wifi.env"],
   "mounts": [
     {
       "source": "/dev",
@@ -49,6 +45,5 @@
         "fill-labs.dependi"
       ]
     }
-  },
-  "postCreateCommand": "rustup component add rustfmt clippy"
+  }
 }

@@ -24,7 +24,7 @@ WORKDIR /home/${CONTAINER_USER}
 
 # Install rustup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- \
-    --default-toolchain nightly -y --profile minimal
+     -y --profile default
 
 RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh
 
@@ -38,12 +38,14 @@ RUN cargo install espup cargo-espflash espflash ldproxy trunk
 RUN espup install\
   --targets "${ESP_BOARD}" \
   --log-level debug \
-  --export-file /home/${CONTAINER_USER}/export-esp.sh    
-    
+  --export-file /home/${CONTAINER_USER}/export-esp.sh  
+  
+  
 # Set default toolchain
 RUN rustup target add wasm32-unknown-unknown
 
 # Activate ESP environment
-RUN echo "source /home/${CONTAINER_USER}/export-esp.sh" >> ~/.bashrc
+RUN echo "source /home/${CONTAINER_USER}/export-esp.sh" >> /home/${CONTAINER_USER}/.zshrc \
+  && echo "source /home/${CONTAINER_USER}/export-esp.sh" >> /home/${CONTAINER_USER}/.bashrc
 
 CMD [ "/bin/bash" ]
