@@ -8,7 +8,6 @@ ENV LANG=C.UTF-8
 ARG CONTAINER_USER=esp
 ARG CONTAINER_GROUP=esp
 ARG ESP_BOARD=all
-ARG GITHUB_TOKEN
 
 # Install dependencies
 RUN apt-get update \
@@ -24,28 +23,26 @@ WORKDIR /home/${CONTAINER_USER}
 
 # Install rustup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- \
-     -y --profile default
+    -y --profile default
 
 RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh
 
 # Update envs
 ENV PATH=${PATH}:/home/${CONTAINER_USER}/.cargo/bin
 
+RUN cargo install cargo-binstall
+
 # Install esp specific crates
-RUN cargo install espup cargo-espflash espflash ldproxy trunk
+RUN cargo binstall espup cargo-espflash espflash ldproxy
 
 # Install Xtensa Rust
 RUN espup install\
-  --targets "${ESP_BOARD}" \
-  --log-level debug \
-  --export-file /home/${CONTAINER_USER}/export-esp.sh  
-  
-  
-# Set default toolchain
-RUN rustup target add wasm32-unknown-unknown
+    --targets "${ESP_BOARD}" \
+    --log-level debug \
+    --export-file /home/${CONTAINER_USER}/export-esp.sh
 
 # Activate ESP environment
 RUN echo "source /home/${CONTAINER_USER}/export-esp.sh" >> /home/${CONTAINER_USER}/.zshrc \
-  && echo "source /home/${CONTAINER_USER}/export-esp.sh" >> /home/${CONTAINER_USER}/.bashrc
+    && echo "source /home/${CONTAINER_USER}/export-esp.sh" >> /home/${CONTAINER_USER}/.bashrc
 
 CMD [ "/bin/bash" ]
